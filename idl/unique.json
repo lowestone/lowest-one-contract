@@ -1,0 +1,5146 @@
+{
+  "address": "DGGCp8MjbdjtxENbgQVK8m2MKdckxtypQK12ssqcJ7be",
+  "metadata": {
+    "name": "unique",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "$UNIQUE: lowest unique number wins"
+  },
+  "instructions": [
+    {
+      "name": "claim",
+      "docs": [
+        "Point at a revealed entry whose number nobody else revealed. The round keeps the",
+        "MAX_WINNERS lowest such numbers, in order. Anyone can call this."
+      ],
+      "discriminator": [
+        62,
+        198,
+        214,
+        193,
+        213,
+        159,
+        108,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "entry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "entry.commitment",
+                "account": "Entry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tally",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  117,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "entry.number",
+                "account": "Entry"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_bundle",
+      "docs": [
+        "Like `claim`, for number `index` of a revealed bundle. Anyone can call this."
+      ],
+      "discriminator": [
+        247,
+        168,
+        177,
+        173,
+        186,
+        161,
+        20,
+        31
+      ],
+      "accounts": [
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bundle",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  110,
+                  100,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "bundle.commitment",
+                "account": "Bundle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tally",
+          "docs": [
+            "The claimed number's tally; its round and number are checked in the instruction."
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "claim_rewards",
+      "docs": [
+        "Claim all accrued staking rewards to your wallet."
+      ],
+      "discriminator": [
+        4,
+        144,
+        132,
+        71,
+        116,
+        23,
+        151,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "staker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "owner_token",
+          "writable": true
+        },
+        {
+          "name": "reserve",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  101,
+                  114,
+                  118,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_bundle",
+      "docs": [
+        "Like `close_entry`, for a bundle: revealed refunds the player; never revealed forfeits",
+        "deposit and rent to the team wallet."
+      ],
+      "discriminator": [
+        102,
+        24,
+        15,
+        14,
+        127,
+        75,
+        214,
+        155
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bundle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  110,
+                  100,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "bundle.commitment",
+                "account": "Bundle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player",
+          "writable": true
+        },
+        {
+          "name": "team_wallet",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_entry",
+      "docs": [
+        "After settlement, close an entry to reclaim its rent. Revealed entries refund the",
+        "player; unrevealed ones forfeit their deposit (and rent) to the team wallet."
+      ],
+      "discriminator": [
+        132,
+        26,
+        202,
+        145,
+        190,
+        37,
+        114,
+        67
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "entry.commitment",
+                "account": "Entry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player",
+          "writable": true
+        },
+        {
+          "name": "team_wallet",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_tally",
+      "docs": [
+        "After settlement, close a number tally and refund its rent to whoever paid for it."
+      ],
+      "discriminator": [
+        160,
+        208,
+        180,
+        37,
+        231,
+        111,
+        21,
+        214
+      ],
+      "accounts": [
+        {
+          "name": "round",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tally",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  117,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "tally.number",
+                "account": "Tally"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "relations": [
+            "tally"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_table",
+      "docs": [
+        "Admin adds a table and opens its first round."
+      ],
+      "discriminator": [
+        214,
+        142,
+        131,
+        250,
+        242,
+        83,
+        135,
+        185
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "id"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "id",
+          "type": "u8"
+        },
+        {
+          "name": "p",
+          "type": {
+            "defined": {
+              "name": "TableParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "enter",
+      "docs": [
+        "Pay the ticket from your wallet and seal a number. The number itself never goes on-chain",
+        "here; `backup` is the player's own encrypted copy so they can reveal from any device.",
+        "`max_ticket`: the most the player agrees to pay (the price the site showed them). The",
+        "keeper can adjust an open round's ticket, so a pick sent just before a rise is refused",
+        "rather than charged more."
+      ],
+      "discriminator": [
+        139,
+        49,
+        209,
+        114,
+        88,
+        91,
+        77,
+        134
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "arg",
+                "path": "commitment"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "player_token",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "reserve",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  101,
+                  114,
+                  118,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_token",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "referrer_token",
+          "docs": [
+            "Optional: the referrer's token account, paid `referral_bps` of the ticket. Once a wallet",
+            "has a referrer, only that referrer's account is accepted."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "profile",
+          "docs": [
+            "`bind_referrer` on their first referred pick, checked there before it's read."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "backup",
+          "type": {
+            "array": [
+              "u8",
+              24
+            ]
+          }
+        },
+        {
+          "name": "max_ticket",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "enter_bundle",
+      "docs": [
+        "Like `enter`, for a bundle of `sealed.len()` numbers (1 to MAX_BUNDLE): pays that many",
+        "tickets and one reveal deposit. `nonce` and `sealed` are the player's own encrypted copy",
+        "(see the site's lib/commit.ts); `sealed` is overwritten with the numbers at reveal."
+      ],
+      "discriminator": [
+        153,
+        251,
+        112,
+        97,
+        190,
+        187,
+        164,
+        6
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bundle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  110,
+                  100,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "arg",
+                "path": "commitment"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "player_token",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "reserve",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  101,
+                  114,
+                  118,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_token",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "referrer_token",
+          "docs": [
+            "Optional: as in `Enter`."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "nonce",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        },
+        {
+          "name": "sealed",
+          "type": {
+            "vec": "u64"
+          }
+        },
+        {
+          "name": "max_ticket",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "enter_bundle_from_stake",
+      "docs": [
+        "Like `enter_from_stake`, for a bundle (as `enter_bundle`)."
+      ],
+      "discriminator": [
+        197,
+        127,
+        222,
+        150,
+        45,
+        30,
+        37,
+        2
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bundle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  110,
+                  100,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "arg",
+                "path": "commitment"
+              }
+            ]
+          }
+        },
+        {
+          "name": "staker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "player_token",
+          "docs": [
+            "Receives any leftover stake too small to keep staked."
+          ],
+          "writable": true
+        },
+        {
+          "name": "stake_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "reserve",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  101,
+                  114,
+                  118,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_token",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "referrer_token",
+          "docs": [
+            "Optional: as in `Enter`."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "nonce",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        },
+        {
+          "name": "sealed",
+          "type": {
+            "vec": "u64"
+          }
+        },
+        {
+          "name": "max_ticket",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "enter_from_stake",
+      "docs": [
+        "Same as `enter`, but the ticket is paid from the player's unclaimed staking rewards first",
+        "and then their stake. If what's left staked would be under the minimum, it's returned",
+        "to their wallet.",
+        "`max_ticket` as in `enter`."
+      ],
+      "discriminator": [
+        245,
+        82,
+        165,
+        46,
+        54,
+        93,
+        196,
+        137
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "arg",
+                "path": "commitment"
+              }
+            ]
+          }
+        },
+        {
+          "name": "staker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "player_token",
+          "docs": [
+            "Receives any leftover stake too small to keep staked."
+          ],
+          "writable": true
+        },
+        {
+          "name": "stake_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "reserve",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  101,
+                  114,
+                  118,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_token",
+          "writable": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "referrer_token",
+          "docs": [
+            "Optional: the referrer's token account, paid `referral_bps` of the ticket. Once a wallet",
+            "has a referrer, only that referrer's account is accepted."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "profile",
+          "docs": [
+            "`bind_referrer` on their first referred pick, checked there before it's read."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "backup",
+          "type": {
+            "array": [
+              "u8",
+              24
+            ]
+          }
+        },
+        {
+          "name": "max_ticket",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "fund_pool",
+      "docs": [
+        "Anyone can top up a table's current pool (e.g. a treasury seed)."
+      ],
+      "discriminator": [
+        36,
+        57,
+        233,
+        176,
+        181,
+        20,
+        87,
+        159
+      ],
+      "accounts": [
+        {
+          "name": "funder",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "funder_token",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "docs": [
+        "One-time setup: global config, the pool, reward and stake vaults, and the staking pool."
+      ],
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "reserve",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  101,
+                  114,
+                  118,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_token"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "p",
+          "type": {
+            "defined": {
+              "name": "ConfigParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "repick",
+      "docs": [
+        "Change your mind: swap a sealed pick for a new one, until REPICK_CUTOFF_SECS before the",
+        "round closes. The old entry is closed (its rent and deposit come back) and a new one takes",
+        "its place; the ticket already paid carries over."
+      ],
+      "discriminator": [
+        89,
+        109,
+        23,
+        99,
+        161,
+        141,
+        244,
+        49
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "old_entry"
+          ]
+        },
+        {
+          "name": "round",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "old_entry",
+          "docs": [
+            "Closed at the end: rent and deposit go back to the player."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "old_entry.commitment",
+                "account": "Entry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "arg",
+                "path": "new_commitment"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "new_backup",
+          "type": {
+            "array": [
+              "u8",
+              24
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "repick_bundle",
+      "docs": [
+        "Like `repick`, for a bundle: swap it for a new bundle of the same size (changing one",
+        "number re-seals the whole bundle). The tickets carry over; the old bundle's rent and",
+        "deposit come back."
+      ],
+      "discriminator": [
+        80,
+        83,
+        57,
+        226,
+        228,
+        156,
+        247,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "old_bundle"
+          ]
+        },
+        {
+          "name": "round",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "old_bundle",
+          "docs": [
+            "Closed at the end: rent and deposit go back to the player."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  110,
+                  100,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "old_bundle.commitment",
+                "account": "Bundle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_bundle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  110,
+                  100,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "arg",
+                "path": "new_commitment"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_commitment",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "nonce",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        },
+        {
+          "name": "sealed",
+          "type": {
+            "vec": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reveal",
+      "docs": [
+        "Open a sealed entry. Anyone may send this (the site or keeper does it for the player),",
+        "but only the right number + salt for this player matches the commitment."
+      ],
+      "discriminator": [
+        9,
+        35,
+        59,
+        190,
+        167,
+        249,
+        76,
+        115
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "Pays for a new number tally if this is the first reveal of that number."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "entry.commitment",
+                "account": "Entry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player",
+          "writable": true
+        },
+        {
+          "name": "tally",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  117,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "arg",
+                "path": "number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "number",
+          "type": "u64"
+        },
+        {
+          "name": "salt",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "reveal_bundle",
+      "docs": [
+        "Open a bundle: all its numbers, in order, and the salt. Anyone may send this. Pass each",
+        "number's tally account ([\"num\", round, number]) as remaining accounts, in the same order",
+        "(a number twice in the bundle: its tally twice); new ones are created, paid by `payer`."
+      ],
+      "discriminator": [
+        221,
+        169,
+        232,
+        212,
+        226,
+        100,
+        40,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "Pays for new number tallies."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round.table_id",
+                "account": "Round"
+              },
+              {
+                "kind": "account",
+                "path": "round.id",
+                "account": "Round"
+              }
+            ]
+          }
+        },
+        {
+          "name": "bundle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  110,
+                  100,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "round"
+              },
+              {
+                "kind": "account",
+                "path": "bundle.commitment",
+                "account": "Bundle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "numbers",
+          "type": {
+            "vec": "u64"
+          }
+        },
+        {
+          "name": "salt",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_paused",
+      "docs": [
+        "Admin stops or resumes new picks on every table. Nothing else is affected: reveals,",
+        "claims, payouts, staking, unstaking and reward claims keep working."
+      ],
+      "discriminator": [
+        91,
+        60,
+        125,
+        192,
+        176,
+        225,
+        166,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "paused",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "set_table_enabled",
+      "docs": [
+        "Admin switches a table on or off (off = no new picks, hidden on the site). A table can",
+        "only be switched off while its current round has no picks, so nobody's picks get stuck."
+      ],
+      "discriminator": [
+        89,
+        15,
+        205,
+        19,
+        158,
+        48,
+        100,
+        22
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "enabled",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "set_ticket",
+      "docs": [
+        "The keeper (or admin) keeps a table's ticket near its dollar price from the price feed:",
+        "at most every `TICKET_UPDATE_SECS`, by at most `max_price_change_bps`. It applies to the",
+        "table's current round too while that round is still open (each pick pays the ticket of",
+        "the moment it's made; a pick's `max_ticket` makes sure nobody pays more than they saw),",
+        "and to every round after."
+      ],
+      "discriminator": [
+        144,
+        21,
+        136,
+        30,
+        112,
+        93,
+        199,
+        54
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "docs": [
+            "The keeper or the admin (checked in the handler)."
+          ],
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "docs": [
+            "The table's current round: its ticket follows while it's still open."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_tokens",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "settle",
+      "docs": [
+        "Pay the winners (or roll the pool over) and open the table's next round. Anyone can call",
+        "this. Pass the winners' token accounts as remaining accounts, lowest number first, one",
+        "for each place that gets paid."
+      ],
+      "discriminator": [
+        175,
+        42,
+        185,
+        87,
+        144,
+        131,
+        102,
+        212
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "Pays rent for the next round's account."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "next_round",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "stake",
+      "docs": [
+        "Stake $UNIQUE. Rewards start accruing immediately."
+      ],
+      "discriminator": [
+        206,
+        176,
+        202,
+        18,
+        200,
+        209,
+        179,
+        108
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "staker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "owner_token",
+          "writable": true
+        },
+        {
+          "name": "stake_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "start_close",
+      "docs": [
+        "Give an open round that has picks but no close time yet its close: the next scheduled",
+        "time. Only rounds opened before v2 can be in that state (they waited for a minimum",
+        "number of picks; now the first pick sets the close). Anyone can call this."
+      ],
+      "discriminator": [
+        89,
+        142,
+        75,
+        142,
+        168,
+        186,
+        68,
+        119
+      ],
+      "accounts": [
+        {
+          "name": "table",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  111,
+                  117,
+                  110,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              },
+              {
+                "kind": "account",
+                "path": "table.current_round",
+                "account": "Table"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unstake",
+      "docs": [
+        "Unstake any amount, instantly. What's left must be zero or at least the minimum stake.",
+        "Unclaimed rewards stay claimable."
+      ],
+      "discriminator": [
+        90,
+        95,
+        107,
+        42,
+        205,
+        124,
+        50,
+        225
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "staker",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "owner_token",
+          "writable": true
+        },
+        {
+          "name": "stake_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_config",
+      "docs": [
+        "Admin updates the global rules (split, tiers, keeper, staking). The split and tiers",
+        "are copied into each round when it opens, so they apply from each table's next round."
+      ],
+      "discriminator": [
+        29,
+        158,
+        252,
+        191,
+        10,
+        83,
+        219,
+        99
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "team_token"
+        }
+      ],
+      "args": [
+        {
+          "name": "p",
+          "type": {
+            "defined": {
+              "name": "ConfigParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_table",
+      "docs": [
+        "Admin changes a table's rules. They apply from its next round."
+      ],
+      "discriminator": [
+        224,
+        23,
+        10,
+        48,
+        181,
+        73,
+        121,
+        187
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "table",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "table.id",
+                "account": "Table"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "p",
+          "type": {
+            "defined": {
+              "name": "TableParams"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Bundle",
+      "discriminator": [
+        15,
+        82,
+        167,
+        230,
+        37,
+        214,
+        82,
+        80
+      ]
+    },
+    {
+      "name": "Config",
+      "discriminator": [
+        155,
+        12,
+        170,
+        224,
+        30,
+        250,
+        204,
+        130
+      ]
+    },
+    {
+      "name": "Entry",
+      "discriminator": [
+        63,
+        18,
+        152,
+        113,
+        215,
+        246,
+        221,
+        250
+      ]
+    },
+    {
+      "name": "Round",
+      "discriminator": [
+        87,
+        127,
+        165,
+        51,
+        73,
+        78,
+        116,
+        174
+      ]
+    },
+    {
+      "name": "StakePool",
+      "discriminator": [
+        121,
+        34,
+        206,
+        21,
+        79,
+        127,
+        255,
+        28
+      ]
+    },
+    {
+      "name": "Staker",
+      "discriminator": [
+        171,
+        229,
+        193,
+        85,
+        67,
+        177,
+        151,
+        4
+      ]
+    },
+    {
+      "name": "Table",
+      "discriminator": [
+        34,
+        100,
+        138,
+        97,
+        236,
+        129,
+        230,
+        112
+      ]
+    },
+    {
+      "name": "Tally",
+      "discriminator": [
+        126,
+        11,
+        29,
+        33,
+        32,
+        101,
+        239,
+        25
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "BundleEntered",
+      "discriminator": [
+        51,
+        254,
+        49,
+        145,
+        181,
+        22,
+        101,
+        103
+      ]
+    },
+    {
+      "name": "Claimed",
+      "discriminator": [
+        217,
+        192,
+        123,
+        72,
+        108,
+        150,
+        248,
+        33
+      ]
+    },
+    {
+      "name": "CloseScheduled",
+      "discriminator": [
+        212,
+        133,
+        198,
+        86,
+        226,
+        177,
+        145,
+        73
+      ]
+    },
+    {
+      "name": "Entered",
+      "discriminator": [
+        247,
+        164,
+        21,
+        222,
+        219,
+        178,
+        237,
+        160
+      ]
+    },
+    {
+      "name": "EntriesPaused",
+      "discriminator": [
+        24,
+        139,
+        98,
+        170,
+        54,
+        152,
+        228,
+        101
+      ]
+    },
+    {
+      "name": "PaidFromStake",
+      "discriminator": [
+        129,
+        60,
+        252,
+        230,
+        36,
+        165,
+        233,
+        5
+      ]
+    },
+    {
+      "name": "Referred",
+      "discriminator": [
+        120,
+        237,
+        159,
+        57,
+        239,
+        105,
+        93,
+        237
+      ]
+    },
+    {
+      "name": "ReferrerBound",
+      "discriminator": [
+        110,
+        55,
+        23,
+        72,
+        19,
+        226,
+        92,
+        119
+      ]
+    },
+    {
+      "name": "Repicked",
+      "discriminator": [
+        33,
+        245,
+        176,
+        34,
+        74,
+        72,
+        236,
+        220
+      ]
+    },
+    {
+      "name": "Revealed",
+      "discriminator": [
+        180,
+        7,
+        199,
+        88,
+        154,
+        19,
+        181,
+        154
+      ]
+    },
+    {
+      "name": "RewardsClaimed",
+      "discriminator": [
+        75,
+        98,
+        88,
+        18,
+        219,
+        112,
+        88,
+        121
+      ]
+    },
+    {
+      "name": "Settled",
+      "discriminator": [
+        232,
+        210,
+        40,
+        17,
+        142,
+        124,
+        145,
+        238
+      ]
+    },
+    {
+      "name": "Staked",
+      "discriminator": [
+        11,
+        146,
+        45,
+        205,
+        230,
+        58,
+        213,
+        240
+      ]
+    },
+    {
+      "name": "TableCreated",
+      "discriminator": [
+        164,
+        233,
+        12,
+        97,
+        250,
+        213,
+        187,
+        147
+      ]
+    },
+    {
+      "name": "TableEnabled",
+      "discriminator": [
+        145,
+        15,
+        43,
+        202,
+        253,
+        244,
+        33,
+        103
+      ]
+    },
+    {
+      "name": "TicketSet",
+      "discriminator": [
+        163,
+        225,
+        147,
+        106,
+        203,
+        55,
+        20,
+        138
+      ]
+    },
+    {
+      "name": "Unstaked",
+      "discriminator": [
+        27,
+        179,
+        156,
+        215,
+        47,
+        71,
+        195,
+        7
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "EntriesClosed",
+      "msg": "Entries are closed for this round"
+    },
+    {
+      "code": 6001,
+      "name": "EntriesPaused",
+      "msg": "New picks are paused"
+    },
+    {
+      "code": 6002,
+      "name": "TableDisabled",
+      "msg": "This table is closed"
+    },
+    {
+      "code": 6003,
+      "name": "TableNotEmpty",
+      "msg": "A table can only be switched off while its round is empty"
+    },
+    {
+      "code": 6004,
+      "name": "NotRevealTime",
+      "msg": "It's not reveal time"
+    },
+    {
+      "code": 6005,
+      "name": "NotClaimTime",
+      "msg": "It's not claim time"
+    },
+    {
+      "code": 6006,
+      "name": "TooEarly",
+      "msg": "Too early for that"
+    },
+    {
+      "code": 6007,
+      "name": "BadNumber",
+      "msg": "Numbers start at 1"
+    },
+    {
+      "code": 6008,
+      "name": "AlreadyRevealed",
+      "msg": "Already revealed"
+    },
+    {
+      "code": 6009,
+      "name": "CommitmentMismatch",
+      "msg": "Number and salt don't match the sealed entry"
+    },
+    {
+      "code": 6010,
+      "name": "NotRevealed",
+      "msg": "Entry was never revealed"
+    },
+    {
+      "code": 6011,
+      "name": "NotUnique",
+      "msg": "Someone else revealed the same number"
+    },
+    {
+      "code": 6012,
+      "name": "AlreadyClaimed",
+      "msg": "This number is already claimed"
+    },
+    {
+      "code": 6013,
+      "name": "NotLowest",
+      "msg": "Enough lower unique numbers are already claimed"
+    },
+    {
+      "code": 6014,
+      "name": "WinnerAccountMissing",
+      "msg": "A winner's token account is missing"
+    },
+    {
+      "code": 6015,
+      "name": "WrongWinnerAccount",
+      "msg": "That token account doesn't belong to the winner"
+    },
+    {
+      "code": 6016,
+      "name": "Unauthorized",
+      "msg": "Only the keeper or admin can do that"
+    },
+    {
+      "code": 6017,
+      "name": "PriceAlreadySet",
+      "msg": "The ticket price was changed less than 10 minutes ago"
+    },
+    {
+      "code": 6018,
+      "name": "PriceChangeTooBig",
+      "msg": "That price change is bigger than allowed"
+    },
+    {
+      "code": 6019,
+      "name": "BadAmount",
+      "msg": "Amount must be more than zero"
+    },
+    {
+      "code": 6020,
+      "name": "NotEnoughStaked",
+      "msg": "Not enough staked"
+    },
+    {
+      "code": 6021,
+      "name": "BelowMinimumStake",
+      "msg": "A stake must be zero or at least the minimum"
+    },
+    {
+      "code": 6022,
+      "name": "NothingToClaim",
+      "msg": "No rewards to claim"
+    },
+    {
+      "code": 6023,
+      "name": "SelfReferral",
+      "msg": "You can't refer yourself"
+    },
+    {
+      "code": 6024,
+      "name": "WrongReferrer",
+      "msg": "This wallet already has a different referrer"
+    },
+    {
+      "code": 6025,
+      "name": "RepickClosed",
+      "msg": "Picks can't be changed in the last minute before the round closes"
+    },
+    {
+      "code": 6026,
+      "name": "BadConfig",
+      "msg": "Invalid config"
+    },
+    {
+      "code": 6027,
+      "name": "Overflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6028,
+      "name": "TicketPriceChanged",
+      "msg": "The ticket price just changed: check the new price and try again"
+    },
+    {
+      "code": 6029,
+      "name": "NothingToStart",
+      "msg": "This round has no picks yet, or already has its close time"
+    },
+    {
+      "code": 6030,
+      "name": "BadBundle",
+      "msg": "A bundle holds 1 to 10 numbers"
+    },
+    {
+      "code": 6031,
+      "name": "BundleSizeChanged",
+      "msg": "A changed bundle must keep the same number of picks"
+    },
+    {
+      "code": 6032,
+      "name": "WrongTally",
+      "msg": "A number's tally account is missing or wrong"
+    }
+  ],
+  "types": [
+    {
+      "name": "Bundle",
+      "docs": [
+        "v6: up to MAX_BUNDLE numbers sealed under one commitment (see the header). `numbers` holds",
+        "them encrypted for the player's backup until the reveal, and the numbers themselves after.",
+        "Same layout start as Entry (round, then player), so the same filters find both."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "round",
+            "type": "pubkey"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "commitment",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "nonce",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "revealed",
+            "type": "bool"
+          },
+          {
+            "name": "deposit",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "numbers",
+            "type": {
+              "vec": "u64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BundleEntered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "commitment",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "count",
+            "type": "u8"
+          },
+          {
+            "name": "pool_tokens",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Claimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "number",
+            "type": "u64"
+          },
+          {
+            "name": "place",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CloseScheduled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "close_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "keeper",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "team_token",
+            "type": "pubkey"
+          },
+          {
+            "name": "team_wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool_bps",
+            "type": "u16"
+          },
+          {
+            "name": "reserve_bps",
+            "type": "u16"
+          },
+          {
+            "name": "burn_bps",
+            "type": "u16"
+          },
+          {
+            "name": "referral_bps",
+            "type": "u16"
+          },
+          {
+            "name": "tier_min_entries",
+            "type": {
+              "array": [
+                "u64",
+                3
+              ]
+            }
+          },
+          {
+            "name": "tier_splits",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u16",
+                    4
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "max_price_change_bps",
+            "type": "u16"
+          },
+          {
+            "name": "min_stake_tokens",
+            "type": "u64"
+          },
+          {
+            "name": "backlog_release_secs",
+            "type": "i64"
+          },
+          {
+            "name": "entries_paused",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "vault_bump",
+            "type": "u8"
+          },
+          {
+            "name": "reserve_bump",
+            "type": "u8"
+          },
+          {
+            "name": "stake_vault_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConfigParams",
+      "docs": [
+        "Rules shared by every table."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "pool_bps",
+            "type": "u16"
+          },
+          {
+            "name": "reserve_bps",
+            "docs": [
+              "Share of each ticket that goes to stakers."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "burn_bps",
+            "type": "u16"
+          },
+          {
+            "name": "referral_bps",
+            "docs": [
+              "Share of each referred ticket paid to the referrer, out of the team's share."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "tier_min_entries",
+            "docs": [
+              "Entries needed for 2, 3 and 4 winners (u64::MAX switches a tier off)."
+            ],
+            "type": {
+              "array": [
+                "u64",
+                3
+              ]
+            }
+          },
+          {
+            "name": "tier_splits",
+            "docs": [
+              "Pool split by place for 1, 2, 3 and 4 winners. Row k pays k+1 places and sums to 10000."
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u16",
+                    4
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "team_wallet",
+            "docs": [
+              "Receives forfeited reveal deposits (SOL)."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "keeper",
+            "docs": [
+              "May call `set_ticket`, and nothing else."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "max_price_change_bps",
+            "docs": [
+              "Largest ticket price change `set_ticket` may make at once (2500 = ±25%)."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "min_stake_tokens",
+            "docs": [
+              "Smallest stake anyone can hold (keeps the reward math well inside its range)."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "backlog_release_secs",
+            "docs": [
+              "Rewards that arrived while nobody was staked are released over this much staked time."
+            ],
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Entered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "commitment",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "pool_tokens",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntriesPaused",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "paused",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Entry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "round",
+            "docs": [
+              "The round account this pick belongs to."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "commitment",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "backup",
+            "type": {
+              "array": [
+                "u8",
+                24
+              ]
+            }
+          },
+          {
+            "name": "number",
+            "type": "u64"
+          },
+          {
+            "name": "revealed",
+            "type": "bool"
+          },
+          {
+            "name": "deposit",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PaidFromStake",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "from_rewards",
+            "type": "u64"
+          },
+          {
+            "name": "from_stake",
+            "type": "u64"
+          },
+          {
+            "name": "returned",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Referred",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "referrer",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReferrerBound",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "referrer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Repicked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_commitment",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "new_commitment",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Revealed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "number",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RewardsClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Round",
+      "docs": [
+        "Everything that decides how a round plays is copied in when it opens,",
+        "so rule changes never alter a round that's already running."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table_id",
+            "type": "u8"
+          },
+          {
+            "name": "id",
+            "type": "u64"
+          },
+          {
+            "name": "ticket_tokens",
+            "type": "u64"
+          },
+          {
+            "name": "pool_tokens",
+            "type": "u64"
+          },
+          {
+            "name": "entries",
+            "type": "u64"
+          },
+          {
+            "name": "revealed",
+            "type": "u64"
+          },
+          {
+            "name": "opened_at",
+            "type": "i64"
+          },
+          {
+            "name": "close_at",
+            "docs": [
+              "When entries close (0 until the first pick)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "legacy_max_seats",
+            "docs": [
+              "v1 leftovers, unused (see Table)."
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "legacy_max_number",
+            "type": "u64"
+          },
+          {
+            "name": "period_secs",
+            "type": "i64"
+          },
+          {
+            "name": "close_offset_secs",
+            "type": "i64"
+          },
+          {
+            "name": "legacy_min_picks",
+            "type": "u32"
+          },
+          {
+            "name": "reveal_secs",
+            "type": "i64"
+          },
+          {
+            "name": "claim_secs",
+            "type": "i64"
+          },
+          {
+            "name": "deposit_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "pool_bps",
+            "type": "u16"
+          },
+          {
+            "name": "reserve_bps",
+            "type": "u16"
+          },
+          {
+            "name": "burn_bps",
+            "type": "u16"
+          },
+          {
+            "name": "referral_bps",
+            "type": "u16"
+          },
+          {
+            "name": "tier_min_entries",
+            "type": {
+              "array": [
+                "u64",
+                3
+              ]
+            }
+          },
+          {
+            "name": "tier_splits",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u16",
+                    4
+                  ]
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "claims",
+            "docs": [
+              "Lowest unique numbers claimed so far, lowest first. Empty slots have number = u64::MAX."
+            ],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "Winner"
+                  }
+                },
+                4
+              ]
+            }
+          },
+          {
+            "name": "all_revealed_at",
+            "docs": [
+              "When the last entry was revealed (0 until then). Ends the reveal window early."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "settled",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Settled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "pool_tokens",
+            "type": "u64"
+          },
+          {
+            "name": "winners",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "WinnerPaid"
+                }
+              }
+            }
+          },
+          {
+            "name": "rolled_over",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakePool",
+      "docs": [
+        "Staking totals and the reward-per-token index."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_staked",
+            "type": "u64"
+          },
+          {
+            "name": "acc_per_token",
+            "docs": [
+              "Rewards per staked token so far, times SCALE."
+            ],
+            "type": "u128"
+          },
+          {
+            "name": "backlog",
+            "docs": [
+              "Rewards that arrived while nobody was staked, not yet released."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "stream_end",
+            "docs": [
+              "When the backlog finishes releasing (pushed back while nobody is staked)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "last_update",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Staked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Staker",
+      "docs": [
+        "One wallet's stake."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "debt",
+            "docs": [
+              "amount × index at the last sync, divided by SCALE: what's already been counted."
+            ],
+            "type": "u128"
+          },
+          {
+            "name": "pending",
+            "docs": [
+              "Rewards earned and not yet claimed or spent."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Table",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u8"
+          },
+          {
+            "name": "ticket_tokens",
+            "type": "u64"
+          },
+          {
+            "name": "legacy_max_seats",
+            "docs": [
+              "v1 leftovers (capped seats, number range, minimum picks): unused, kept in place so",
+              "accounts created before v2 still load. Always 0 from v2 on."
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "legacy_max_number",
+            "type": "u64"
+          },
+          {
+            "name": "period_secs",
+            "type": "i64"
+          },
+          {
+            "name": "close_offset_secs",
+            "type": "i64"
+          },
+          {
+            "name": "legacy_min_picks",
+            "type": "u32"
+          },
+          {
+            "name": "reveal_secs",
+            "type": "i64"
+          },
+          {
+            "name": "claim_secs",
+            "type": "i64"
+          },
+          {
+            "name": "reveal_deposit_lamports",
+            "type": "u64"
+          },
+          {
+            "name": "enabled",
+            "type": "bool"
+          },
+          {
+            "name": "current_round",
+            "type": "u64"
+          },
+          {
+            "name": "ticket_set_at",
+            "docs": [
+              "When `set_ticket` was last used (at most every `TICKET_UPDATE_SECS`)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TableCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TableEnabled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "enabled",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TableParams",
+      "docs": [
+        "One table's rules."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "ticket_tokens",
+            "docs": [
+              "Tokens per pick, including decimals."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "period_secs",
+            "docs": [
+              "Rounds close at `close_offset_secs + k * period_secs` (3600 and 0 = hourly at :00)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "close_offset_secs",
+            "type": "i64"
+          },
+          {
+            "name": "reveal_secs",
+            "type": "i64"
+          },
+          {
+            "name": "claim_secs",
+            "type": "i64"
+          },
+          {
+            "name": "reveal_deposit_lamports",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Tally",
+      "docs": [
+        "How many revealed entries picked this number in this round."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "round",
+            "docs": [
+              "The round account."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "number",
+            "type": "u64"
+          },
+          {
+            "name": "count",
+            "type": "u32"
+          },
+          {
+            "name": "payer",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TicketSet",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "table",
+            "type": "u8"
+          },
+          {
+            "name": "round",
+            "type": "u64"
+          },
+          {
+            "name": "ticket_tokens",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Unstaked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Winner",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "number",
+            "type": "u64"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WinnerPaid",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "number",
+            "type": "u64"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ]
+}
